@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import { loadNews } from '../actions/newsActions';
 import NewsFeed from '../components/NewsFeed';
-import { reshapeNewsData } from '../utils/dataTransformations';
+import { allNewsSelector } from '../selectors/newsSelectors';
 
 const mapStateToProps = state => ({
-    news: reshapeNewsData(state.news)
+    news: allNewsSelector(state)
 });
 
 const mapDispatchToProps = dispatch => (
