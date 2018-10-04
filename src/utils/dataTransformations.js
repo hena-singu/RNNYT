@@ -10,7 +10,7 @@ const getMultimediaUrlByFormt = (multimedia, format) => {
         return '';
     }
 
-    return matchingFormat;
+    return matchingFormat.url;
 };
 
 export const reshapeNewsData = news => (

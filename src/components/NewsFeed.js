@@ -39,7 +39,7 @@ export default class NewsFeed extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource)
+            dataSource: this.state.dataSource.cloneWithRows(nextProps.news)
         });
     }
 

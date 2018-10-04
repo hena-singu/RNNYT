@@ -16,17 +16,17 @@ import Search from './src/components/Search';
 import createStore from './src/createStore';
 import { reshapeNewsData } from './src/utils/dataTransformations';
 import mockData from './src/mockData.json';
+import { loadNews, searchNews } from './src/reducers/newsFeedReducer';
+import moment from 'moment';
 
 const store = createStore();
 
 export default class App extends Component {
   render() {
-    console.log(mockData.results[0].title);
-
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          {/*<NewsFeedContainer />*/}
+          <NewsFeedContainer />
         </View>
       </Provider>
     );
