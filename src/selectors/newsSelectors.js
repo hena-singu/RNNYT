@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
-import { reshapeNewsData } from '../utils/dataTransformations';
+import { reshapeNewsData, filterNewsBySearthTerm } from '../utils/dataTransformations';
 
-// Input selector
+// News input selector
 const newsSelector = state => state.news;
 
-// Memorized selectors
+// News memoized selectors
 const reshapeNewsSelector = createSelector(
     [newsSelector],
     reshapeNewsData
@@ -13,4 +13,18 @@ const reshapeNewsSelector = createSelector(
 export const allNewsSelector = createSelector(
     [reshapeNewsSelector],
     newsItems => newsItems
+);
+
+// Search input selector
+const searchTermSelector = state => state.searchTerm;
+
+// Search memoized selectors
+const caseInsensitiveSearchTermSelector = createSelector(
+    searchTermSelector,
+    searchTerm => searchTerm.toLowerCase()
+);
+
+export const searchNewsSelector = createSelector(
+    [reshapeNewsSelector, caseInsensitiveSearchTermSelector],
+    filterNewsBySearthTerm
 );

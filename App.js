@@ -12,12 +12,8 @@ import {
 } from 'react-native';
 
 import NewsFeedContainer from './src/containers/NewsFeedContainer';
-import Search from './src/components/Search';
+import SearchContainer from './src/containers/SearchContainer';
 import createStore from './src/createStore';
-import { reshapeNewsData } from './src/utils/dataTransformations';
-import mockData from './src/mockData.json';
-import { loadNews, searchNews } from './src/reducers/newsFeedReducer';
-import moment from 'moment';
 
 const store = createStore();
 
@@ -26,7 +22,8 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <NewsFeedContainer />
+          <NewsFeedContainer style={{flex: 1}}/>
+          <SearchContainer style={{flex: 1}}/>
         </View>
       </Provider>
     );
@@ -36,6 +33,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     backgroundColor: '#F5FCFF',
   }
 });

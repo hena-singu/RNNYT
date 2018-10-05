@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, View, TextInput } from 'react-native';
 
 import * as globalStyles from '../styles/global';
+import NewsFeed from './NewsFeed';
 
 export default class Search extends Component {
+    static propTypes = {
+        filteredNews: PropTypes.arrayOf(PropTypes.object),
+        searchNews: PropTypes.func.isRequired
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -11,18 +18,24 @@ export default class Search extends Component {
         };
     }
 
+    searchNews = text => {
+        this.setState({ searchText: text });
+        this.props.searchNews(text);
+    };
+
     render() {
         return (
             <View style={globalStyles.COMMON_STYLES.pageContainer}>
                 <View style={styles.search}>
                     <TextInput
                         style={styles.input}
-                        onChangeText={text => this.setState({ searchText: text })}
+                        onChangeText={this.searchNews}
                         value={this.state.searchText}
                         placeholder={'Search'}
                         placeholderTextColor={globalStyles.MUTED_COLOR}
                     />
                 </View>
+                <NewsFeed news={this.props.filteredNews} listStyle={{}} />
             </View>
         );
     }
