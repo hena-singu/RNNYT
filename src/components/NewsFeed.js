@@ -6,7 +6,9 @@ import {
     ListView,
     Modal,
     WebView,
-    TouchableOpacity
+    TouchableOpacity,
+    RefreshControl,
+    ActivityIndicator
 } from 'react-native';
 
 import * as globalStyles from '../styles/global';
@@ -17,7 +19,8 @@ export default class NewsFeed extends Component {
     static propTypes = {
         news: PropTypes.arrayOf(PropTypes.object),
         listStyles: View.propTypes.style,
-        loadNews: PropTypes.func
+        loadNews: PropTypes.func,
+        showLoadingSpinner: PropTypes.bool
     };
 
     constructor(props) {
@@ -29,7 +32,9 @@ export default class NewsFeed extends Component {
 
         this.state = {
             dataSource: ds.cloneWithRows(props.news),
-            modalVisible: false
+            modalVisible: false,
+            initialLoading: true,
+            refreshing: false
         };
     }
 
@@ -39,7 +44,8 @@ export default class NewsFeed extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(nextProps.news)
+            dataSource: this.state.dataSource.cloneWithRows(nextProps.news),
+            initialLoading: false
         });
     }
 
@@ -98,23 +104,58 @@ export default class NewsFeed extends Component {
     }
 
     render() {
+        const {
+            listStyles = globalStyles.COMMON_STYLES.pageContainer,
+            showLoadingSpinner
+        } = this.props;
+
+        const { initialLoading, refreshing, dataSource } = this.state;
+
         return (
-            <View style={globalStyles.COMMON_STYLES.pageContainer}>
-                <ListView
-                    enableEmptySections
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow}
-                    style={this.props.listStyles}
-                />
-                {this.renderModal()}
-            </View>
+            initialLoading && showLoadingSpinner ? (
+                <View style={[listStyles, styles.loadingContainer]}>
+                    <ActivityIndicator
+                        animating
+                        size={'small'}
+                        {...this.props}
+                    />
+                </View>
+            ) : (
+                <View style={styles.container}>
+                    <ListView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={this.refresh}
+                            />
+                        }
+                        enableEmptySections
+                        dataSource={this.state.dataSource}
+                        renderRow={this.renderRow}
+                        style={this.props.listStyles}
+                    />
+                    {this.renderModal()}
+                </View>
+            )
         );
     }
 }
 
+NewsFeed.defaultProps = {
+    showLoadingSpinner: true
+};
+
 const styles = StyleSheet.create({
     newsItem: {
         marginBottom: 20
+    },
+    container: {
+        flex: 1,
+        backgroundColor: globalStyles.BG_COLOR
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     modalContent: {
         flex: 1,
