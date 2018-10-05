@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
+import promiseMiddleware from 'redux-promise';
 
 import newsFeedReducer from './reducers/newsFeedReducer';
 import searchNewsReducer from './reducers/searchNewsReducer';
@@ -13,6 +14,6 @@ export default (initialState = {}) => (
             searchTerm: searchNewsReducer
         }),
         initialState,
-        applyMiddleware(logger)
+        applyMiddleware(logger, promiseMiddleware)
     )
 );
